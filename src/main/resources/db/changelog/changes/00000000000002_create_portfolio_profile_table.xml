@@ -155,7 +155,7 @@
 
             <column
                     name="profile_image_data"
-                    valueBlobFile="../data/images/profile_pic.jpg"/>
+                    valueBlobFile="../data/images/profile_pic.png"/>
 
             <where>
                 email = 'jkearns123@gmail.com'
