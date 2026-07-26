@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet
+            id="00000000000003_create_education_table"
+            author="jade">
+
+        <createTable
+                schemaName="portfolio"
+                tableName="education">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true">
+                <constraints
+                        nullable="false"
+                        primaryKey="true"
+                        primaryKeyName="pk_education"/>
+            </column>
+
+            <column
+                    name="public_id"
+                    type="UUID"
+                    defaultValueComputed="gen_random_uuid()">
+                <constraints
+                        nullable="false"
+                        unique="true"
+                        uniqueConstraintName="uk_education_public_id"/>
+            </column>
+
+            <column name="profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="institution" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="qualification" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="field_of_study" type="VARCHAR(255)"/>
+
+            <column name="location" type="VARCHAR(255)"/>
+
+            <column name="start_year" type="SMALLINT"/>
+
+            <column name="end_year" type="SMALLINT"/>
+
+            <column
+                    name="current_study"
+                    type="BOOLEAN"
+                    defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="TEXT"/>
+
+            <column
+                    name="display_order"
+                    type="INTEGER"
+                    defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="created_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="last_modified_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_education_profile"
+                baseTableSchemaName="portfolio"
+                baseTableName="education"
+                baseColumnNames="profile_id"
+                referencedTableSchemaName="portfolio"
+                referencedTableName="portfolio_profile"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex
+                schemaName="portfolio"
+                tableName="education"
+                indexName="idx_education_profile_id">
+            <column name="profile_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable
+                    schemaName="portfolio"
+                    tableName="education"/>
+        </rollback>
+
+        <loadData
+                schemaName="portfolio"
+                file="db/changelog/data/jade_kearns_education.csv"
+                separator="|"
+                quotchar="&quot;"
+                encoding="UTF-8"
+                tableName="education"
+                usePreparedStatements="true">
+
+            <column
+                    header="id"
+                    name="id"
+                    type="skip"/>
+
+            <column
+                    header="public_id"
+                    name="public_id"
+                    type="skip"/>
+
+            <column
+                    header="created_date"
+                    name="created_date"
+                    type="skip"/>
+
+            <column
+                    header="last_modified_date"
+                    name="last_modified_date"
+                    type="skip"/>
+
+        </loadData>
+
+    </changeSet>
+
+</databaseChangeLog>

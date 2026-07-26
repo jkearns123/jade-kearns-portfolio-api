@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet
+            id="00000000000005_create_skill_table"
+            author="jade">
+
+        <createTable
+                schemaName="portfolio"
+                tableName="skill">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true">
+                <constraints
+                        nullable="false"
+                        primaryKey="true"
+                        primaryKeyName="pk_skill"/>
+            </column>
+
+            <column
+                    name="public_id"
+                    type="UUID"
+                    defaultValueComputed="gen_random_uuid()">
+                <constraints
+                        nullable="false"
+                        unique="true"
+                        uniqueConstraintName="uk_skill_public_id"/>
+            </column>
+
+            <column name="profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="skill_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="TEXT"/>
+
+            <column
+                    name="featured"
+                    type="BOOLEAN"
+                    defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="display_order"
+                    type="INTEGER"
+                    defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="created_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="last_modified_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_skill_profile"
+                baseTableSchemaName="portfolio"
+                baseTableName="skill"
+                baseColumnNames="profile_id"
+                referencedTableSchemaName="portfolio"
+                referencedTableName="portfolio_profile"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addUniqueConstraint
+                schemaName="portfolio"
+                tableName="skill"
+                columnNames="profile_id, name"
+                constraintName="uk_skill_profile_name"/>
+
+        <sql>
+            ALTER TABLE portfolio.skill
+                ADD CONSTRAINT ck_skill_type
+                    CHECK (skill_type IN ('TECHNICAL', 'SOFT'));
+        </sql>
+
+        <createIndex
+                schemaName="portfolio"
+                tableName="skill"
+                indexName="idx_skill_profile_type_display_order">
+            <column name="profile_id"/>
+            <column name="skill_type"/>
+            <column name="display_order"/>
+        </createIndex>
+
+        <loadData
+                schemaName="portfolio"
+                file="db/changelog/data/jade_kearns_skill.csv"
+                separator="|"
+                quotchar="&quot;"
+                encoding="UTF-8"
+                tableName="skill"
+                usePreparedStatements="true">
+
+            <column
+                    header="id"
+                    name="id"
+                    type="skip"/>
+
+            <column
+                    header="public_id"
+                    name="public_id"
+                    type="skip"/>
+
+            <column
+                    header="created_date"
+                    name="created_date"
+                    type="skip"/>
+
+            <column
+                    header="last_modified_date"
+                    name="last_modified_date"
+                    type="skip"/>
+
+        </loadData>
+
+        <rollback>
+            <dropTable
+                    schemaName="portfolio"
+                    tableName="skill"/>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

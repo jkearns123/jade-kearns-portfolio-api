@@ -1,0 +1,32 @@
+spring:
+  config:
+    import: "optional:file:./.env[.properties]"
+  application:
+    name: portfolio-api
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME:portfolio_user}
+    password: ${DB_PASSWORD:portfolio_local_password}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: portfolio
+        format_sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/master.xml
+    liquibase-schema: public
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

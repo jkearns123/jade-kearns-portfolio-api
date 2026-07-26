@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet
+            id="00000000000008_create_supporting_document_table"
+            author="jade">
+
+        <createTable
+                schemaName="portfolio"
+                tableName="supporting_document">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true">
+                <constraints
+                        nullable="false"
+                        primaryKey="true"
+                        primaryKeyName="pk_supporting_document"/>
+            </column>
+
+            <column
+                    name="public_id"
+                    type="UUID"
+                    defaultValueComputed="gen_random_uuid()">
+                <constraints
+                        nullable="false"
+                        unique="true"
+                        uniqueConstraintName="uk_supporting_document_public_id"/>
+            </column>
+
+            <column name="profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="document_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="summary" type="TEXT"/>
+
+            <column name="issuer_name" type="VARCHAR(255)"/>
+
+            <column name="issuer_title" type="VARCHAR(255)"/>
+
+            <column name="issuer_organization" type="VARCHAR(255)"/>
+
+            <column name="file_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="content_type"
+                    type="VARCHAR(100)"
+                    defaultValue="application/pdf">
+                <constraints nullable="false"/>
+            </column>
+
+            <!--
+              PostgreSQL stores the complete PDF bytes in this BYTEA column.
+              It is temporarily nullable while the CSV metadata is loaded.
+              The valueBlobFile updates below populate it before the NOT NULL
+              constraint is applied.
+            -->
+            <column name="document_data" type="BYTEA"/>
+
+            <column
+                    name="display_order"
+                    type="INTEGER"
+                    defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="created_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="last_modified_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_supporting_document_profile"
+                baseTableSchemaName="portfolio"
+                baseTableName="supporting_document"
+                baseColumnNames="profile_id"
+                referencedTableSchemaName="portfolio"
+                referencedTableName="portfolio_profile"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex
+                schemaName="portfolio"
+                tableName="supporting_document"
+                indexName="idx_supporting_document_profile_type">
+            <column name="profile_id"/>
+            <column name="document_type"/>
+        </createIndex>
+
+        <addUniqueConstraint
+                schemaName="portfolio"
+                tableName="supporting_document"
+                columnNames="profile_id, file_name"
+                constraintName="uk_supporting_document_profile_file_name"/>
+
+        <loadData
+                schemaName="portfolio"
+                file="../data/jade_kearns_supporting_document.csv"
+                relativeToChangelogFile="true"
+                separator="|"
+                quotchar="&quot;"
+                encoding="UTF-8"
+                tableName="supporting_document"
+                usePreparedStatements="true">
+
+            <column
+                    header="id"
+                    name="id"
+                    type="skip"/>
+
+            <column
+                    header="public_id"
+                    name="public_id"
+                    type="skip"/>
+
+            <column
+                    header="created_date"
+                    name="created_date"
+                    type="skip"/>
+
+            <column
+                    header="last_modified_date"
+                    name="last_modified_date"
+                    type="skip"/>
+
+        </loadData>
+
+        <update
+                schemaName="portfolio"
+                tableName="supporting_document">
+            <column
+                    name="document_data"
+                    valueBlobFile="../data/documents/Diploma.pdf"/>
+            <where>file_name = 'Diploma.pdf'</where>
+        </update>
+
+        <update
+                schemaName="portfolio"
+                tableName="supporting_document">
+            <column
+                    name="document_data"
+                    valueBlobFile="../data/documents/jade_kearns_testimonial_zaheera_jaffer.pdf"/>
+            <where>file_name = 'jade_kearns_testimonial_zaheera_jaffer.pdf'</where>
+        </update>
+
+        <update
+                schemaName="portfolio"
+                tableName="supporting_document">
+            <column
+                    name="document_data"
+                    valueBlobFile="../data/documents/jade_kearns_testimonial_adam_wesson.pdf"/>
+            <where>file_name = 'jade_kearns_testimonial_adam_wesson.pdf'</where>
+        </update>
+
+        <update
+                schemaName="portfolio"
+                tableName="supporting_document">
+            <column
+                    name="document_data"
+                    valueBlobFile="../data/documents/jade_kearns_testimonial_shaun_allies.pdf"/>
+            <where>file_name = 'jade_kearns_testimonial_shaun_allies.pdf'</where>
+        </update>
+
+        <update
+                schemaName="portfolio"
+                tableName="supporting_document">
+            <column
+                    name="document_data"
+                    valueBlobFile="../data/documents/jade_kearns_testimonial_ikraam_pathan.pdf"/>
+            <where>file_name = 'jade_kearns_testimonial_ikraam_pathan.pdf'</where>
+        </update>
+
+        <addNotNullConstraint
+                schemaName="portfolio"
+                tableName="supporting_document"
+                columnName="document_data"
+                columnDataType="BYTEA"
+                constraintName="nn_supporting_document_data"/>
+
+        <rollback>
+            <dropTable
+                    schemaName="portfolio"
+                    tableName="supporting_document"/>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

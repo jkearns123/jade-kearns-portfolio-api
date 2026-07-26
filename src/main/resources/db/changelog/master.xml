@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include
+            file="changes/00000000000001_create_portfolio_schema.xml"
+            relativeToChangelogFile="true"/>
+    <include
+            file="changes/00000000000002_create_portfolio_profile_table.xml"
+            relativeToChangelogFile="true"/>
+    <include
+            file="changes/00000000000003_create_education_table.xml"
+            relativeToChangelogFile="true"/>
+    <include
+            file="changes/00000000000004_create_experience_table.xml"
+            relativeToChangelogFile="true"/>
+    <include
+            file="changes/00000000000005_create_skill_table.xml"
+            relativeToChangelogFile="true"/>
+    <include
+            file="changes/00000000000006_create_interest_table.xml"
+            relativeToChangelogFile="true"/>
+    <include file="changes/00000000000007_create_professional_reference_table.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changes/00000000000008_create_supporting_document_table.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changes/00000000000009_create_additional_information_table.xml"
+             relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

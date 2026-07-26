@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet
+            id="00000000000002_create_portfolio_profile_table"
+            author="jade">
+
+        <createTable
+                schemaName="portfolio"
+                tableName="portfolio_profile">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true">
+                <constraints
+                        nullable="false"
+                        primaryKey="true"
+                        primaryKeyName="pk_portfolio_profile"/>
+            </column>
+
+            <column
+                    name="public_id"
+                    type="UUID"
+                    defaultValueComputed="gen_random_uuid()">
+                <constraints
+                        nullable="false"
+                        unique="true"
+                        uniqueConstraintName="uk_portfolio_profile_public_id"/>
+            </column>
+
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="professional_title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="headline" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="professional_summary" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="mobile_number" type="VARCHAR(30)"/>
+
+            <column
+                    name="show_email"
+                    type="BOOLEAN"
+                    defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="show_mobile_number"
+                    type="BOOLEAN"
+                    defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="city" type="VARCHAR(100)"/>
+
+            <column name="province" type="VARCHAR(100)"/>
+
+            <column name="country" type="VARCHAR(100)"/>
+
+            <column name="profile_image_file_name" type="VARCHAR(255)"/>
+
+            <column name="profile_image_content_type" type="VARCHAR(100)"/>
+
+            <column name="profile_image_data" type="BYTEA"/>
+
+            <column name="resume_url" type="VARCHAR(1000)"/>
+
+            <column
+                    name="available_for_work"
+                    type="BOOLEAN"
+                    defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="created_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="last_modified_date"
+                    type="TIMESTAMP WITH TIME ZONE"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable
+                    schemaName="portfolio"
+                    tableName="portfolio_profile"/>
+        </rollback>
+
+        <loadData
+                schemaName="portfolio"
+                file="db/changelog/data/jade_kearns_portfolio_profile.csv"
+                separator="|"
+                quotchar="&quot;"
+                encoding="UTF-8"
+                tableName="portfolio_profile"
+                usePreparedStatements="true">
+
+            <column
+                    header="id"
+                    name="id"
+                    type="skip"/>
+
+            <column
+                    header="public_id"
+                    name="public_id"
+                    type="skip"/>
+
+            <column
+                    header="created_date"
+                    name="created_date"
+                    type="skip"/>
+
+            <column
+                    header="last_modified_date"
+                    name="last_modified_date"
+                    type="skip"/>
+
+        </loadData>
+
+        <update
+                schemaName="portfolio"
+                tableName="portfolio_profile">
+
+            <column
+                    name="profile_image_data"
+                    valueBlobFile="../data/images/profile_pic.jpg"/>
+
+            <where>
+                email = 'jkearns123@gmail.com'
+            </where>
+
+        </update>
+
+
+
+    </changeSet>
+
+</databaseChangeLog>
