@@ -12,7 +12,7 @@ import za.co.jadekearns.portfolio_api.profile.repository.PortfolioProfileReposit
 @Service
 @Transactional(readOnly = true)
 public class PortfolioProfileService {
-    private static final String PROFILE_IMAGE_ENDPOINT = "/api/profile/image";
+//    private static final String PROFILE_IMAGE_ENDPOINT = "/api/profile/image";
 
     private final PortfolioProfileRepository portfolioProfileRepository;
 
@@ -24,8 +24,6 @@ public class PortfolioProfileService {
 
     public PortfolioProfileResponse getProfile() {
         PortfolioProfile profile = getPortfolioProfile();
-        boolean hasProfileImage = profile.getProfileImageData() != null
-                && profile.getProfileImageData().length > 0;
 
         return new PortfolioProfileResponse(
                 profile.getPublicId(),
@@ -43,7 +41,7 @@ public class PortfolioProfileService {
                 profile.getProvince(),
                 profile.getCountry(),
                 profile.isAvailableForWork(),
-                hasProfileImage ? PROFILE_IMAGE_ENDPOINT : null,
+//                hasProfileImage ? PROFILE_IMAGE_ENDPOINT : null,
                 profile.getResumeUrl()
         );
     }
