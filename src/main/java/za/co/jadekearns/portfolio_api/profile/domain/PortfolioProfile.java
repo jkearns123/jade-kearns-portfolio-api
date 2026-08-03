@@ -65,6 +65,12 @@ public class PortfolioProfile extends AbstractAuditingEntity<Long> {
     @Column(name = "profile_image_content_type", length = 100)
     private String profileImageContentType;
 
+    @Column(name = "linkedin_url", length = 1000)
+    private String linkedInUrl;
+
+    @Column(name = "github_url", length = 1000)
+    private String githubUrl;
+
     @JdbcTypeCode(SqlTypes.LONG32VARBINARY)
     @Column(name = "profile_image_data", columnDefinition = "BYTEA")
     private byte[] profileImageData;
@@ -226,5 +232,21 @@ public class PortfolioProfile extends AbstractAuditingEntity<Long> {
 
     public void setProfileImageData(byte[] profileImageData) {
         this.profileImageData = profileImageData;
+    }
+
+    public String getLinkedInUrl() {
+        return linkedInUrl;
+    }
+
+    public void setLinkedInUrl(String linkedInUrl) {
+        this.linkedInUrl = linkedInUrl;
+    }
+
+    public String getGithubUrl() {
+        return githubUrl;
+    }
+
+    public void setGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
     }
 }

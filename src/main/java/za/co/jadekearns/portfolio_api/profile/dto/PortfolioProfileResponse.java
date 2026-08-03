@@ -16,6 +16,8 @@ public record PortfolioProfileResponse(
         String province,
         String country,
         boolean availableForWork,
-        String resumeUrl
+        String resumeUrl,
+        String linkedInUrl,
+        String githubUrl
 ) {
 }

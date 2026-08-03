@@ -1,6 +1,8 @@
 package za.co.jadekearns.portfolio_api.experience.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import za.co.jadekearns.portfolio_api.experience.domain.Experience;
 
 import java.util.List;

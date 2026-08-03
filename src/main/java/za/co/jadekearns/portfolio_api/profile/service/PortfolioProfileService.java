@@ -42,7 +42,9 @@ public class PortfolioProfileService {
                 profile.getCountry(),
                 profile.isAvailableForWork(),
 //                hasProfileImage ? PROFILE_IMAGE_ENDPOINT : null,
-                profile.getResumeUrl()
+                profile.getResumeUrl(),
+                profile.getLinkedInUrl(),
+                profile.getGithubUrl()
         );
     }
 
